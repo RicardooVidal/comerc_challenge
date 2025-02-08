@@ -27,6 +27,7 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign(['customer_id']);
             $table->dropColumn('customer_id');
+            $table->drop();
         });
     }
 };

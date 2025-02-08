@@ -20,8 +20,11 @@ return new class extends Migration
             $table->string('address');
             $table->string('address_complement')->nullable();
             $table->string('neighborhood');
+            $table->string('city')->nullable();
+            $table->char('state', 2)->nullable();
             $table->string('zip_code');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -22,6 +22,7 @@ services:
       MYSQL_DATABASE: project
       MYSQL_USER: user
       MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3307:3306"
     volumes:
