@@ -11,7 +11,7 @@ class OrderRequest extends FormRequest
         return [
             'customer_id' => ['required', 'exists:customers,id'],
             'products' => ['required', 'array'],
-            'products.*.product_id' => ['required', 'exists:products,id', 'distinct'],
+            'products.*.product_id' => ['required', 'exists:products,id,deleted_at,NULL', 'distinct'],
             'products.*.quantity' => ['required', 'integer', 'min:1'],
             'products.*.price' => ['required', 'numeric', 'min:1']
         ];

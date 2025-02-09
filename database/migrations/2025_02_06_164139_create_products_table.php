@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('price', 10, 2);
             $table->string('photo')->nullable();
+            $table->foreignId('product_type_id')->constrained('product_types');
+            $table->timestamps();
             $table->softDeletes();
         });
     }

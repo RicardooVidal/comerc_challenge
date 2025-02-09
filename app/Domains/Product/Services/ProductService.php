@@ -33,7 +33,7 @@ class ProductService
     public function update(int $id, ProductDTO $dto, ?UploadedFile $photo = null): bool
     {
         $data = $dto->toArray();
-
+    
         if ($photo) {
             $this->deletePhoto($id);
 

@@ -25,7 +25,7 @@ class OrderService
         ]);
 
         // Attach product to order table pivot
-        $this->attachProducts($order, $dto->products);
+        $order = $this->orderRepository->attachProducts($order, $dto->products);
 
         // Send email
         try {
@@ -40,7 +40,7 @@ class OrderService
 
         $order->total = $this->calculateTotal($order);
 
-        return $this->transformOrder->handle($order->toArray());
+        return $order->toArray();
     }
     
     public function findById(int $id): array
@@ -54,7 +54,6 @@ class OrderService
     public function update(int $id, OrderDTO $dto): bool
     {
         $order = $this->orderRepository->findById($id);
-        $this->orderRepository->syncProducts($order, $dto->products);
         
         return $this->orderRepository->update($id, $dto->toArray());
     }
@@ -72,19 +71,6 @@ class OrderService
             $order->total = $this->calculateTotal($order);
             return $this->transformOrder->handle($order->toArray());
         })->toArray();
-    }
-
-    /**
-     * Attach products to order table pivot
-     */
-    private function attachProducts(Order $order, array $products): void
-    {
-        foreach ($products as $product) {
-            $order->products()->attach($product['product_id'], [
-                'quantity' => $product['quantity'],
-                'price' => $product['price']
-            ]);
-        }
     }
 
     /**

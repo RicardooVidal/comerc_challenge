@@ -30,14 +30,15 @@ class Order extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'orders_products')
+        return $this->belongsToMany(Product::class)
             ->withPivot('quantity', 'price')
-            ->select(['products.id', 'products.name', 'products.photo']);
+            ->whereNull('order_product.deleted_at');
     }
 
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class)
-            ->select(['customers.id', 'customers.name']);
+            ->select(['customers.id', 'customers.name', 'customers.email'])
+            ->withTrashed();
     }
 }
