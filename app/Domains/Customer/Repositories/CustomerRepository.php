@@ -13,26 +13,11 @@ class CustomerRepository implements BaseRepositoryInterface
     )
     {}
 
-    public function create(array $data): Customer
-    {
-        return $this->customer->create($data);
-    }
-    
     public function findById(int $id): Customer
     {
         return $this->customer->findOrFail($id);
     }
-    
-    public function update(int $id, array $data): bool
-    {
-        return $this->customer->findOrFail($id)->update($data);
-    }
-    
-    public function delete(int $id): void
-    {
-        $this->customer->findOrFail($id)->delete();
-    }
-    
+
     public function findAll(array $filters): Collection
     {
         return $this->customer
@@ -48,5 +33,20 @@ class CustomerRepository implements BaseRepositoryInterface
             }
         })
         ->get();
+    }
+
+    public function create(array $data): Customer
+    {
+        return $this->customer->create($data);
+    }
+    
+    public function update(int $id, array $data): bool
+    {
+        return $this->customer->findOrFail($id)->update($data);
+    }
+    
+    public function delete(int $id): void
+    {
+        $this->customer->findOrFail($id)->delete();
     }
 }

@@ -9,10 +9,21 @@ RUN apt-get update && apt-get install -y \
 
 RUN set -eux \
     && apt-get update \
-    && apt-get install -y libzip-dev zlib1g-dev \
-    && docker-php-ext-install zip
-
-RUN docker-php-ext-install pdo pgsql mysqli pdo_mysql
+    && apt-get install -y \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+        libwebp-dev \
+        libxpm-dev \
+        libavif-dev \
+        zlib1g-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+        --with-xpm \
+        --with-avif \
+    && docker-php-ext-install zip gd pdo pgsql mysqli pdo_mysql
 
 WORKDIR /var/www
 

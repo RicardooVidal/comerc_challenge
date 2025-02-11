@@ -27,10 +27,10 @@ class ProductService
     
     public function findById(int $id)
     {
-        return $this->productRepository->findById($id)->toArray();
+        return $this->productRepository->findById($id)?->toArray();
     }
     
-    public function update(int $id, ProductDTO $dto, ?UploadedFile $photo = null): bool
+    public function update(int $id, ProductDTO $dto, ?UploadedFile $photo = null): ?bool
     {
         $data = $dto->toArray();
     
@@ -59,7 +59,7 @@ class ProductService
     {
         $product = $this->findById($id);
 
-        if ($product['photo']) {
+        if (!empty($product['photo'])) {
             Storage::disk('public')->delete($product['photo']);
         }
     }

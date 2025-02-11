@@ -13,16 +13,23 @@ class OrderRepository implements BaseRepositoryInterface
     )
     {}
 
-    public function create(array $data): Order
-    {
-        return $this->order->create($data);
-    }
-    
     public function findById(int $id): ?Order
     {
         return $this->order
             ->with('products', 'customer')
             ->findOrFail($id);
+    }
+
+    public function findAll(array $filters): Collection
+    {
+        return $this->order
+            ->with('products', 'customer')
+            ->where($filters)->get();
+    }
+
+    public function create(array $data): Order
+    {
+        return $this->order->create($data);
     }
     
     public function update(int $id, array $data): bool
@@ -38,13 +45,6 @@ class OrderRepository implements BaseRepositoryInterface
         $order = $this->findById($id);
         $order->products()->newPivotStatement()->where('order_id', $id)->update(['deleted_at' => now()]);
         $order->delete();
-    }
-    
-    public function findAll(array $filters): Collection
-    {
-        return $this->order
-            ->with('products', 'customer')
-            ->where($filters)->get();
     }
 
     public function syncProducts(Order $order, array $products): void

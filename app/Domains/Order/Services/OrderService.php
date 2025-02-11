@@ -17,50 +17,12 @@ class OrderService
         private readonly TransformOrder $transformOrder
     )
     {}
-    
-    public function create(OrderDTO $dto): array
-    {
-        $order = $this->orderRepository->create([
-            'customer_id' => $dto->customer_id,
-        ]);
 
-        // Attach product to order table pivot
-        $order = $this->orderRepository->attachProducts($order, $dto->products);
-
-        // Send email
-        try {
-            Mail::to($order->customer->email)->send(new OrderCreated($order));
-        } catch (\Exception $e) {
-            // Log error but don't stop the process
-            Log::error('Failed to send order confirmation email', [
-                'order_id' => $order->id,
-                'error' => $e->getMessage()
-            ]);
-        }
-
-        $order->total = $this->calculateTotal($order);
-
-        return $order->toArray();
-    }
-    
     public function findById(int $id): array
     {
         $order = $this->orderRepository->findById($id);
         $order->total = $this->calculateTotal($order);
-
         return $this->transformOrder->handle($order->toArray());
-    }
-    
-    public function update(int $id, OrderDTO $dto): bool
-    {
-        $order = $this->orderRepository->findById($id);
-        
-        return $this->orderRepository->update($id, $dto->toArray());
-    }
-    
-    public function delete(int $id): void
-    {
-        $this->orderRepository->delete($id);
     }
 
     public function findAll(array $filters): array
@@ -72,14 +34,58 @@ class OrderService
             return $this->transformOrder->handle($order->toArray());
         })->toArray();
     }
+    
+    public function create(OrderDTO $dto): array
+    {
+        $order = $this->orderRepository->create([
+            'customer_id' => $dto->customer_id,
+        ]);
+
+        $order = $this->orderRepository->attachProducts($order, $dto->products);
+
+        $this->sendEmail($order);
+
+        $order->total = $this->calculateTotal($order);
+
+        return $order->toArray();
+    }
+    
+    public function update(int $id, OrderDTO $dto): ?bool
+    {
+        $order = $this->orderRepository->findById($id);
+        
+        return $this->orderRepository->update($id, $dto->toArray());
+    }
+    
+    public function delete(int $id): void
+    {
+        $this->orderRepository->delete($id);
+    }
 
     /**
      * Calculate total of order
      */
-    private function calculateTotal(Order $order): float
+    protected function calculateTotal(Order $order): float
     {
         return $order->products->sum(function ($product) {
             return $product->pivot->quantity * $product->pivot->price;
         });
+    }
+
+    /**
+     * Send email to customer
+     */
+    protected function sendEmail(Order $order): void
+    {
+        // Send email
+        try {
+            Mail::to($order->customer->email)->send(new OrderCreated($order));
+        } catch (\Exception $e) {
+            // Log error but don't stop the process
+            Log::error('Failed to send order confirmation email', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }
