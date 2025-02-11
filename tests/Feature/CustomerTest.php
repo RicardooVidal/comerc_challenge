@@ -3,12 +3,20 @@
 namespace Tests\Feature;
 
 use App\Domains\Customer\Entities\Customer;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(UserSeeder::class);
+        $this->signIn();
+    }
 
     public function test_can_list_customers(): void
     {

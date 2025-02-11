@@ -11,16 +11,21 @@ class CustomerService
         private readonly CustomerRepository $customerRepository
     )
     {}
+
+    public function findById(int $id): array
+    {
+        return $this->customerRepository->findById($id)?->toArray();
+    }
+
+    public function findAll(array $filters): array
+    {
+        return $this->customerRepository->findAll($filters)->toArray();
+    }
     
     public function create(CustomerDTO $dto): array
     {
         return $this->customerRepository->create($dto->toArray())->toArray();
     }   
-    
-    public function findById(int $id): array
-    {
-        return $this->customerRepository->findById($id)?->toArray();
-    }
     
     public function update(int $id, CustomerDTO $dto): ?bool
     {
@@ -30,10 +35,5 @@ class CustomerService
     public function delete(int $id): void
     {
         $this->customerRepository->delete($id);
-    }
-
-    public function findAll(array $filters): array
-    {
-        return $this->customerRepository->findAll($filters)->toArray();
     }
 }

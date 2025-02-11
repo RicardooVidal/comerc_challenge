@@ -4,6 +4,7 @@ namespace App\Domains\Product\Repositories;
 
 use App\Repositories\BaseRepositoryInterface;
 use App\Domains\Product\Entities\ProductType;
+use Illuminate\Support\Collection;
 
 class ProductTypeRepository implements BaseRepositoryInterface
 {
@@ -12,28 +13,28 @@ class ProductTypeRepository implements BaseRepositoryInterface
     )
     {}
 
-    public function create(array $data)
+    public function findById(int $id): ?ProductType
+    {
+        return $this->productType->findOrFail($id);
+    }
+
+    public function findAll(array $data): Collection
+    {
+        return $this->productType->where($data)->get();
+    }
+
+    public function create(array $data): ProductType
     {
         return $this->productType->create($data);
     }
     
-    public function findById(int $id)
-    {
-        return $this->productType->findOrFail($id);
-    }
-    
-    public function update(int $id, array $data)
+    public function update(int $id, array $data): bool
     {
         return $this->productType->findOrFail($id)->update($data);
     }
     
-    public function delete(int $id)
+    public function delete(int $id): void
     {
-        return $this->productType->findOrFail($id)->delete();
-    }
-    
-    public function findAll(array $data)
-    {
-        return $this->productType->where($data)->get();
+        $this->productType->findOrFail($id)->delete();
     }
 }

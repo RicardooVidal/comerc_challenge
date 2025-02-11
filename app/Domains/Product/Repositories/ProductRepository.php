@@ -13,14 +13,19 @@ class ProductRepository implements BaseRepositoryInterface
     )
     {}
 
-    public function create(array $data): Product
-    {
-        return $this->product->create($data);
-    }
-    
     public function findById(int $id): ?Product
     {
         return $this->product->findOrFail($id);
+    }
+
+    public function findAll(array $data): Collection
+    {
+        return $this->product->where($data)->get();
+    }
+
+    public function create(array $data): Product
+    {
+        return $this->product->create($data);
     }
     
     public function update(int $id, array $data): bool
@@ -31,10 +36,5 @@ class ProductRepository implements BaseRepositoryInterface
     public function delete(int $id): bool
     {
         return $this->product->findOrFail($id)->delete();
-    }
-    
-    public function findAll(array $data): Collection
-    {
-        return $this->product->where($data)->get();
     }
 }

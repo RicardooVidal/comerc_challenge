@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductType;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,13 @@ use Tests\TestCase;
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(UserSeeder::class);
+        $this->signIn();
+    }
 
     public function test_can_list_products(): void
     {
@@ -71,7 +79,7 @@ class ProductTest extends TestCase
         $this->withProductType();
         $product = Product::factory()->make();
         $productData = $product->toArray();
-        $productData['photo'] = UploadedFile::fake()->image('test.jpg');
+        $productData['photo'] = UploadedFile::fake()->image('test.png');
 
         // Act
         $response = $this->postJson('/api/products', $productData);
@@ -145,13 +153,13 @@ class ProductTest extends TestCase
         $this->withProductType();
         $product = Product::factory()->create();
         $productData = $product->toArray();
-        $productData['photo'] = UploadedFile::fake()->image('test.jpg');
+        $productData['photo'] = UploadedFile::fake()->image('test.png');
 
         $productUpdated = [
             'name' => 'Updated Product',
             'price' => 100.0,
             'product_type_id' => 1,
-            'photo' => UploadedFile::fake()->image('test.jpg')
+            'photo' => UploadedFile::fake()->image('test.png')
         ];
 
         // Act

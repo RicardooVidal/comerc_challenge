@@ -4,19 +4,25 @@ namespace Tests\Feature;
 
 use App\Domains\Customer\Entities\Customer;
 use App\Domains\Order\Entities\Order;
-use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductType;
+use App\Models\User;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(UserSeeder::class);
+        $this->signIn();
+    }
 
     public function test_can_list_orders(): void
     {

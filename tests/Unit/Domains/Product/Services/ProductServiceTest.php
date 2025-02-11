@@ -131,17 +131,17 @@ class ProductServiceTest extends TestCase
         ];
 
         $photo = Mockery::mock(UploadedFile::class);
-        $photo->shouldReceive('hashName')->andReturn('test-hash.jpg');
+        $photo->shouldReceive('hashName')->andReturn('test-hash.png');
         $photo->shouldReceive('store')
             ->with('produtos', 'public')
-            ->andReturn('produtos/test-hash.jpg');
+            ->andReturn('produtos/test-hash.png');
         
         $dto = ProductDTO::fromArray($product);
-        $expectedProduct = new Product([...$product, 'photo' => 'produtos/test-hash.jpg']);
+        $expectedProduct = new Product([...$product, 'photo' => 'produtos/test-hash.png']);
 
         $this->repository->expects($this->once())
             ->method('create')
-            ->with([...$product, 'photo' => 'produtos/test-hash.jpg'])
+            ->with([...$product, 'photo' => 'produtos/test-hash.png'])
             ->willReturn($expectedProduct);
 
         // Act
@@ -155,7 +155,7 @@ class ProductServiceTest extends TestCase
     {
         // Arrange
         $id = 1;
-        $oldPhoto = 'produtos/old-photo.jpg';
+        $oldPhoto = 'produtos/old-photo.png';
         $product = [
             'name' => 'Test Product',
             'price' => 100.0,
@@ -167,10 +167,10 @@ class ProductServiceTest extends TestCase
         
         $existingProduct = new Product($product);
         $newPhoto = Mockery::mock(UploadedFile::class);
-        $newPhoto->shouldReceive('hashName')->andReturn('new-test-hash.jpg');
+        $newPhoto->shouldReceive('hashName')->andReturn('new-test-hash.png');
         $newPhoto->shouldReceive('store')
             ->with('produtos', 'public')
-            ->andReturn('produtos/new-test-hash.jpg');
+            ->andReturn('produtos/new-test-hash.png');
         
         $dto = ProductDTO::fromArray($product);
 
@@ -181,7 +181,7 @@ class ProductServiceTest extends TestCase
 
         $this->repository->expects($this->once())
             ->method('update')
-            ->with($id, [...$product, 'photo' => 'produtos/new-test-hash.jpg'])
+            ->with($id, [...$product, 'photo' => 'produtos/new-test-hash.png'])
             ->willReturn(true);
 
         // Act
@@ -196,7 +196,7 @@ class ProductServiceTest extends TestCase
     {
         // Arrange
         $id = 1;
-        $oldPhoto = 'produtos/old-photo.jpg';
+        $oldPhoto = 'produtos/old-photo.png';
         $product = [
             'name' => 'Test Product',
             'price' => 100.0,
@@ -262,10 +262,10 @@ class ProductServiceTest extends TestCase
         $dto = ProductDTO::fromArray($product);
         
         $newPhoto = Mockery::mock(UploadedFile::class);
-        $newPhoto->shouldReceive('hashName')->andReturn('new-test-hash.jpg');
+        $newPhoto->shouldReceive('hashName')->andReturn('new-test-hash.png');
         $newPhoto->shouldReceive('store')
             ->with('produtos', 'public')
-            ->andReturn('produtos/new-test-hash.jpg');
+            ->andReturn('produtos/new-test-hash.png');
 
         $this->repository->expects($this->once())
             ->method('findById')
@@ -274,7 +274,7 @@ class ProductServiceTest extends TestCase
 
         $this->repository->expects($this->once())
             ->method('update')
-            ->with($id, [...$product, 'photo' => 'produtos/new-test-hash.jpg'])
+            ->with($id, [...$product, 'photo' => 'produtos/new-test-hash.png'])
             ->willReturn(true);
 
         // Act
@@ -288,7 +288,7 @@ class ProductServiceTest extends TestCase
     {
         // Arrange
         $id = 1;
-        $photo = 'produtos/product.jpg';
+        $photo = 'produtos/product.png';
         $product = new Product([
             'name' => 'Test Product',
             'price' => 100.0,

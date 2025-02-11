@@ -17,6 +17,23 @@ class OrderService
         private readonly TransformOrder $transformOrder
     )
     {}
+
+    public function findById(int $id): array
+    {
+        $order = $this->orderRepository->findById($id);
+        $order->total = $this->calculateTotal($order);
+        return $this->transformOrder->handle($order->toArray());
+    }
+
+    public function findAll(array $filters): array
+    {
+        $orders = $this->orderRepository->findAll($filters);
+
+        return $orders->map(function ($order) {
+            $order->total = $this->calculateTotal($order);
+            return $this->transformOrder->handle($order->toArray());
+        })->toArray();
+    }
     
     public function create(OrderDTO $dto): array
     {
@@ -33,13 +50,6 @@ class OrderService
         return $order->toArray();
     }
     
-    public function findById(int $id): array
-    {
-        $order = $this->orderRepository->findById($id);
-        $order->total = $this->calculateTotal($order);
-        return $this->transformOrder->handle($order->toArray());
-    }
-    
     public function update(int $id, OrderDTO $dto): ?bool
     {
         $order = $this->orderRepository->findById($id);
@@ -50,16 +60,6 @@ class OrderService
     public function delete(int $id): void
     {
         $this->orderRepository->delete($id);
-    }
-
-    public function findAll(array $filters): array
-    {
-        $orders = $this->orderRepository->findAll($filters);
-
-        return $orders->map(function ($order) {
-            $order->total = $this->calculateTotal($order);
-            return $this->transformOrder->handle($order->toArray());
-        })->toArray();
     }
 
     /**
