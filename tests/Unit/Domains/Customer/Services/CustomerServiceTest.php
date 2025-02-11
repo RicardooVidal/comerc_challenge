@@ -26,25 +26,21 @@ class CustomerServiceTest extends TestCase
 
     public function test_find_customer_by_id(): void
     {
-        // Arrange
         $id = 1;
         $customer = Customer::factory()->make()->toArray();
-        
+
         $this->repository->expects($this->once())
             ->method('findById')
             ->with($id)
             ->willReturn(new Customer($customer));
 
-        // Act
         $result = $this->service->findById($id);
 
-        // Assert        
         $this->assertEquals($customer, $result);
     }
 
     public function test_find_customer_by_id_not_found(): void
     {
-        // Arrange
         $id = 1;
 
         $this->repository->expects($this->once())
@@ -54,13 +50,11 @@ class CustomerServiceTest extends TestCase
 
         $this->expectException(ModelNotFoundException::class);
 
-        // Act
         $this->service->findById($id);
     }
 
     public function test_find_all_customers(): void
     {
-        // Arrange
         $customers = [
             [
                 'name' => 'Test Customer',
@@ -80,16 +74,13 @@ class CustomerServiceTest extends TestCase
             ->method('findAll')
             ->willReturn(collect($customers));
 
-        // Act
         $result = $this->service->findAll([]);
 
-        // Assert
         $this->assertEquals($customers, $result);
     }
 
     public function test_create_customer(): void
     {
-        // Arrange
         $customer = Customer::factory()->make()->toArray();
 
         $this->repository->expects($this->once())
@@ -97,16 +88,13 @@ class CustomerServiceTest extends TestCase
             ->with($customer)
             ->willReturn(new Customer($customer));
 
-        // Act
         $result = $this->service->create(new CustomerDTO(...$customer));
 
-        // Assert
         $this->assertEquals($customer, $result);
     }
 
     public function test_update_customer(): void
     {
-        // Arrange
         $customer = Customer::factory()->make();
         $customer->id = 1;
 
@@ -128,16 +116,13 @@ class CustomerServiceTest extends TestCase
             ->with($customer->id, $customerData)
             ->willReturn(true);
 
-        // Act
         $result = $this->service->update($customer->id, new CustomerDTO(...$customerData));
 
-        // Assert
         $this->assertEquals(true, $result);
     }
 
     public function test_update_customer_not_found(): void
     {
-        // Arrange
         $customer = Customer::factory()->make();
         $customer->id = 1;
 
@@ -161,13 +146,11 @@ class CustomerServiceTest extends TestCase
 
         $this->expectException(ModelNotFoundException::class);
 
-        // Act
         $this->service->update($customer->id, new CustomerDTO(...$customerData));
     }
 
     public function test_delete_customer(): void
     {
-        // Arrange
         $customer = Customer::factory()->make();
         $customer->id = 1;
 

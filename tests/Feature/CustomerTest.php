@@ -20,25 +20,19 @@ class CustomerTest extends TestCase
 
     public function test_can_list_customers(): void
     {
-        // Arrange
         Customer::factory(10)->create();
 
-        // Act
         $response = $this->getJson('/api/customers');
 
-        // Assert
         $response->assertOk();
     }
 
     public function test_can_show_customer(): void
     {
-        // Arrange
         $customer = Customer::factory()->create();
 
-        // Act
         $response = $this->getJson('/api/customers/1');
 
-        // Assert
         $response->assertOk();
 
         $this->assertJson(json_encode($customer->toArray()));
@@ -46,14 +40,11 @@ class CustomerTest extends TestCase
 
     public function test_can_create_customer(): void
     {
-        // Arrange
         $customer = Customer::factory()->make();
         $customerData = $customer->toArray();
 
-        // Act
         $response = $this->postJson('/api/customers', $customerData);
 
-        // Assert
         $response->assertCreated();
 
         $this->assertDatabaseHas('customers', [
@@ -82,7 +73,6 @@ class CustomerTest extends TestCase
     
     public function test_can_update_customer(): void
     {
-        // Arrange
         $customer = Customer::factory()->create();
 
         $updatedCustomer = [
@@ -98,10 +88,8 @@ class CustomerTest extends TestCase
             'zip_code' => '00000000'
         ];
 
-        // Act
         $response = $this->putJson('/api/customers/1', $updatedCustomer);
 
-        // Assert
         $response->assertOk();
 
         $customer = Customer::find(1);
@@ -130,13 +118,10 @@ class CustomerTest extends TestCase
     
     public function test_can_delete_customer(): void
     {
-        // Arrange
         $customer = Customer::factory()->create();
 
-        // Act
         $response = $this->deleteJson("/api/customers/{$customer->id}");
 
-        // Assert
         $response->assertNoContent();
 
         $this->assertSoftDeleted('customers', [
@@ -146,7 +131,7 @@ class CustomerTest extends TestCase
 
     public function test_cannot_delete_nonexistent_customer(): void
     {
-        $response = $this->deleteJson('/api/customers/9999'); // ID que não existe
-        $response->assertNotFound(); // 404 Not Found
+        $response = $this->deleteJson('/api/customers/9999');
+        $response->assertNotFound();
     }
 }

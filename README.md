@@ -70,6 +70,8 @@ O projeto foi desenvolvido utilizando os princípios DDD (Domain-Driven Design) 
 
    Foram desenvolvidos testes unitários que verificam toda a funcionalidade das principais rotinas da API sem nenhuma integração com banco de dados ou qualquer outro serviço externo. E para testar a integração com o banco de dados, foram desenvolvidos testes de integração.
 
+   Todos os testes implementam o padrão AAA (Arrange, Act, Assert).
+
 2. **Para executar os testes:**:  
    ```bash
     docker compose app_challenge php artisan test 
@@ -79,6 +81,21 @@ O projeto foi desenvolvido utilizando os princípios DDD (Domain-Driven Design) 
    ```bash
     docker compose app_challenge php artisan test --filter=test_create_order
     ou php artisan test --filter=test_create_order
+
+### Email
+   Há a possibilidade de configurar um servidor de email no arquivo **config/mail.php** e utilizar o service de envio de emails do Laravel **Mail::send()**. 
+
+   Um email é disparado a cada pedido criado, conforme o código abaixo:
+
+   ```php
+
+    Mail::send(new OrderCreated($order));
+
+   ```
+   No entanto, por padrão foi implementado o driver padrão do Laravel **log::info()** para o envio de emails. Portanto, caso o serviço de email não seja configurado, os emails não serão enviados.
+
+### Fotos
+    No cadastro de produtos há a possibilidade de cadastrar uma foto para o mesmo, utilizando o campo **photo** no modelo **Product**. A imagem será armazenada no diretório **public/produtos** e o campo **photo** será atualizado com o nome da imagem.
 
 ### Endpoints
 Todos os endpoints estão documentados no [Swagger](http://localhost:8085/api-doc)

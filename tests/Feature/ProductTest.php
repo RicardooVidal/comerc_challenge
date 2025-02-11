@@ -25,13 +25,10 @@ class ProductTest extends TestCase
     {
         $this->withProductType();
 
-        // Arrange
         Product::factory(10)->create();
 
-        // Act
         $response = $this->getJson('/api/products');
 
-        // Assert
         $response->assertOk();
 
         $response->assertJson(Product::all()->toArray());
@@ -39,14 +36,11 @@ class ProductTest extends TestCase
 
     public function test_can_show_product(): void
     {
-        // Arrange
         $this->withProductType();
         $product = Product::factory()->create();
 
-        // Act
         $response = $this->getJson("/api/products/{$product->id}");
 
-        // Assert
         $response->assertOk();
 
         $this->assertJson(json_encode($product->toArray()));
@@ -54,15 +48,12 @@ class ProductTest extends TestCase
 
     public function test_can_create_product_without_photo(): void
     {
-        // Arrange
         $this->withProductType();
         $product = Product::factory()->make();
         $productData = $product->toArray();
 
-        // Act
         $response = $this->postJson('/api/products', $productData);
 
-        // Assert
         $response->assertCreated();
 
         $this->assertDatabaseHas('products', [
@@ -75,16 +66,13 @@ class ProductTest extends TestCase
 
     public function test_can_create_product_with_photo(): void
     {
-        // Arrange
         $this->withProductType();
         $product = Product::factory()->make();
         $productData = $product->toArray();
         $productData['photo'] = UploadedFile::fake()->image('test.png');
 
-        // Act
         $response = $this->postJson('/api/products', $productData);
 
-        // Assert
         $response->assertCreated();
 
         $this->assertDatabaseHas('products', [
@@ -110,7 +98,6 @@ class ProductTest extends TestCase
 
     public function test_can_update_product_without_photo(): void
     {
-        // Arrange
         $this->withProductType();
         $product = Product::factory()->create();
        
@@ -120,10 +107,8 @@ class ProductTest extends TestCase
             'product_type_id' => 1
         ];
 
-        // Act
         $response = $this->putJson("/api/products/{$product->id}", $productUpdated);
 
-        // Assert
         $response->assertOk();
 
         $this->assertDatabaseHas('products', [
@@ -149,7 +134,6 @@ class ProductTest extends TestCase
 
     public function test_can_update_product_with_photo_delete_old_photo(): void
     {
-        // Arrange
         $this->withProductType();
         $product = Product::factory()->create();
         $productData = $product->toArray();
@@ -162,11 +146,9 @@ class ProductTest extends TestCase
             'photo' => UploadedFile::fake()->image('test.png')
         ];
 
-        // Act
         $this->postJson("/api/products/{$product->id}", $productData);
         $responsePut = $this->putJson("/api/products/{$product->id}", $productUpdated);
 
-        // Assert
         $responsePut->assertOk();
 
         Storage::disk('public')->assertExists('produtos/' . $productUpdated['photo']->hashName());
@@ -175,14 +157,11 @@ class ProductTest extends TestCase
 
     public function test_can_delete_product(): void
     {
-        // Arrange
         $this->withProductType();
         $product = Product::factory()->create();
 
-        // Act
         $response = $this->deleteJson("/api/products/{$product->id}");
 
-        // Assert
         $response->assertNoContent();
 
         $this->assertSoftDeleted('products', [

@@ -77,11 +77,9 @@ class OrderService
      */
     protected function sendEmail(Order $order): void
     {
-        // Send email
         try {
             Mail::to($order->customer->email)->send(new OrderCreated($order));
         } catch (\Exception $e) {
-            // Log error but don't stop the process
             Log::error('Failed to send order confirmation email', [
                 'order_id' => $order->id,
                 'error' => $e->getMessage()

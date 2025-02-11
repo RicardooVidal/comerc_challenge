@@ -8,17 +8,9 @@ class ProductTypeRequest extends FormRequest
 {
     public function rules(): array
     {
-        $rules = [
+        return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
         ];
-
-        // If it's an update request (PUT/PATCH), make fields optional
-        if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'string', 'max:255'];
-            $rules['description'] = ['sometimes', 'string', 'max:255'];
-        }
-
-        return $rules;
     }
 }

@@ -49,7 +49,6 @@ class OrderRepository implements BaseRepositoryInterface
 
     public function syncProducts(Order $order, array $products): void
     {
-        // Soft delete existing relationships
         $order->products()->newPivotStatement()->where('order_id', $order->id)->update(['deleted_at' => now()]);
 
         foreach ($products as $product) {

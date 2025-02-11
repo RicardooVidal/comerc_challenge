@@ -39,7 +39,6 @@ class OrderServiceTest extends MockeryTestCase
 
     public function test_find_order_by_id(): void
     {
-        // Arrange
         $order = Order::factory()->make()->toArray();
         $order['id'] = 1;
 
@@ -82,16 +81,13 @@ class OrderServiceTest extends MockeryTestCase
             ->with($order)
             ->andReturn($expectedOrder);
 
-        // Act
         $result = $this->service->findById($order['id']);
-
-        // Assert        
+    
         $this->assertEquals($expectedOrder, $result);
     }
 
     public function test_find_all_orders(): void
     {
-        // Arrange
         $orders = Order::factory()
             ->count(2)
             ->make();
@@ -147,7 +143,6 @@ class OrderServiceTest extends MockeryTestCase
 
     public function test_create_order(): void
     {
-        // Arrange
         $order = [
             'customer_id' => 1,
             'products' => [
@@ -192,17 +187,14 @@ class OrderServiceTest extends MockeryTestCase
             ->with($orderModel)
             ->andReturn(300);
 
-        // Act
         $result = $this->service->create($dto);
 
-        // Assert
         $this->service->shouldHaveReceived('sendEmail')->once();
         $this->assertEquals($expectedOrder, $result);
     }
 
     public function test_calculate_total(): void
     {
-        // Arrange
         $products = collect([
             (object) [
                 'id' => 1,
@@ -229,17 +221,14 @@ class OrderServiceTest extends MockeryTestCase
             ->with('products')
             ->andReturn($products);
 
-        // Act
         $result = $this->service->calculateTotal($order);
 
-        // Assert
         $expectedTotal = (2 * 50) + (2 * 100);
         $this->assertEquals($expectedTotal, $result);
     }
 
     public function test_calculate_total_with_empty_products(): void
     {
-        // Arrange
         $products = collect([]);
 
         $order = Mockery::mock(Order::class);
@@ -247,16 +236,13 @@ class OrderServiceTest extends MockeryTestCase
             ->with('products')
             ->andReturn($products);
 
-        // Act
         $result = $this->service->calculateTotal($order);
 
-        // Assert
         $this->assertEquals(0, $result);
     }
 
     public function test_calculate_total_with_decimal_prices(): void
     {
-        // Arrange
         $products = collect([
             (object) [
                 'id' => 1,
@@ -283,10 +269,8 @@ class OrderServiceTest extends MockeryTestCase
             ->with('products')
             ->andReturn($products);
 
-        // Act
         $result = $this->service->calculateTotal($order);
 
-        // Assert
         $expectedTotal = (2 * 50.50) + (3 * 99.99);
         $this->assertEquals($expectedTotal, $result);
     }

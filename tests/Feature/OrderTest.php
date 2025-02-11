@@ -26,14 +26,11 @@ class OrderTest extends TestCase
 
     public function test_can_list_orders(): void
     {
-        // Arrange
         $this->withCustomers();
         Order::factory(10)->create();
 
-        // Act
         $response = $this->getJson('/api/orders');
 
-        // Assert
         $response->assertOk();
 
         $response->assertJson(Order::all()->toArray());
@@ -41,14 +38,11 @@ class OrderTest extends TestCase
 
     public function test_can_show_order(): void
     {
-        // Arrange
         $this->withCustomers();
         $order = $this->withOrder();
 
-        // Act
         $response = $this->getJson("/api/orders/{$order->id}");
 
-        // Assert
         $response->assertOk();
 
         $this->assertJson(json_encode($order->toArray()));
@@ -56,7 +50,6 @@ class OrderTest extends TestCase
 
     public function test_can_create_order(): void
     {
-        // Arrange
         $this->withCustomers();
         $this->withProductType();
         $this->withProducts();
@@ -66,10 +59,8 @@ class OrderTest extends TestCase
             fn ($id) => ['product_id' => $id, 'quantity' => 1, 'price' => 1]
         )->toArray();
 
-        // Act
         $response = $this->postJson('/api/orders', $orderData->toArray());
 
-        // Assert
         $response->assertCreated();
 
         $orderId = $response->json('id');
@@ -100,7 +91,6 @@ class OrderTest extends TestCase
 
     public function test_can_update_order(): void
     {
-        // Arrange
         $this->withCustomers();
         $this->withProductType();
 
@@ -110,10 +100,8 @@ class OrderTest extends TestCase
             fn ($id) => ['product_id' => $id, 'quantity' => 1, 'price' => 1]
         )->toArray();
 
-        // Act
         $response = $this->putJson("/api/orders/{$order->id}", $orderData->toArray());
 
-        // Assert
         $response->assertOk();
 
         $orderId = $order->id;
@@ -147,7 +135,6 @@ class OrderTest extends TestCase
 
     public function test_can_delete_order(): void
     {
-        // Arrange
         $this->withCustomers();
         $this->withProductType();
 
@@ -159,10 +146,8 @@ class OrderTest extends TestCase
             'price' => 1
         ]);
 
-        // Act
         $response = $this->deleteJson("/api/orders/{$order->id}");
 
-        // Assert
         $response->assertNoContent();
 
         $this->assertSoftDeleted('orders', [

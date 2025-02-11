@@ -33,4 +33,4 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 EXPOSE 8085
 
-CMD ["sh", "-c", "cp .env.dev .env && composer install --ignore-platform-reqs && php artisan key:generate && php artisan serve --host=0.0.0.0 --port=8085"]
+CMD ["sh", "-c", "cp .env.dev .env && composer install --ignore-platform-reqs && php artisan key:generate && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=8085"]
