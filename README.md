@@ -47,11 +47,11 @@ O projeto foi desenvolvido utilizando os princípios DDD (Domain-Driven Design) 
 
 3. **Executar migrations**:  
    ```bash
-    docker compose exec app php artisan migrate
+    docker compose exec app_challenge php artisan migrate
 
 4. **Executar seeders**:  
    ```bash
-    docker compose exec app php artisan db:seed
+    docker compose exec app_challenge php artisan db:seed
 
 5. **Autenticação**:  
    Este projeto utiliza Laravel Sanctum para autenticação. Após o [login](http://localhost:8085/api-doc#/Login/post_api_login), copiar o token gerado e utilizar no header **Authorization** antecipado por "Bearer". Exemplo: **"Bearer 2|tEIYo01732uizYM50..."**.
@@ -72,11 +72,13 @@ O projeto foi desenvolvido utilizando os princípios DDD (Domain-Driven Design) 
 
 2. **Para executar os testes:**:  
    ```bash
-    php artisan test
+    docker compose app_challenge php artisan test 
+    ou php artisan test
 
 3. **Para executar um teste em específico:**  
    ```bash
-    php artisan test --filter=test_create_order
+    docker compose app_challenge php artisan test --filter=test_create_order
+    ou php artisan test --filter=test_create_order
 
 ### Endpoints
 Todos os endpoints estão documentados no [Swagger](http://localhost:8085/api-doc)
