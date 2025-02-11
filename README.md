@@ -95,7 +95,7 @@ O projeto foi desenvolvido utilizando os princípios DDD (Domain-Driven Design) 
    No entanto, por padrão foi implementado o driver padrão do Laravel **log::info()** para o envio de emails. Portanto, caso o serviço de email não seja configurado, os emails não serão enviados.
 
 ### Fotos
-    No cadastro de produtos há a possibilidade de cadastrar uma foto para o mesmo, utilizando o campo **photo** no modelo **Product**. A imagem será armazenada no diretório **public/produtos** e o campo **photo** será atualizado com o nome da imagem.
+   No cadastro de produtos há a possibilidade de cadastrar uma foto para o mesmo, utilizando o campo **photo** no modelo **Product**. A imagem será armazenada no diretório **public/produtos** e o campo **photo** será atualizado com o nome da imagem.
 
 ### Endpoints
 Todos os endpoints estão documentados no [Swagger](http://localhost:8085/api-doc)
