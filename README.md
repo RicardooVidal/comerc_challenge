@@ -7,7 +7,9 @@
 4. [Instalação](#instalação)
 5. [Autenticação](#autenticação)
 6. [Testes](#testes)
-7. [Endpoints](#endpoints)
+7. [Email](#email)
+8. [Fotos](#fotos)
+9. [Endpoints](#endpoints)
 
 ---
 
