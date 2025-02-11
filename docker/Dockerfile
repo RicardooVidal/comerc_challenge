@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 RUN set -eux \
     && apt-get update \
     && apt-get install -y libzip-dev zlib1g-dev \
+    && apt-get install php-gd -y \
     && docker-php-ext-install zip
 
 RUN docker-php-ext-install pdo pgsql mysqli pdo_mysql

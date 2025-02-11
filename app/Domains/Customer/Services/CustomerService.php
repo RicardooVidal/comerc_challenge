@@ -19,10 +19,10 @@ class CustomerService
     
     public function findById(int $id): array
     {
-        return $this->customerRepository->findById($id)->toArray();
+        return $this->customerRepository->findById($id)?->toArray();
     }
     
-    public function update(int $id, CustomerDTO $dto): bool
+    public function update(int $id, CustomerDTO $dto): ?bool
     {
         return $this->customerRepository->update($id, $dto->toArray());
     }

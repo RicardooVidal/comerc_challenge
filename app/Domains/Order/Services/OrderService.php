@@ -24,19 +24,9 @@ class OrderService
             'customer_id' => $dto->customer_id,
         ]);
 
-        // Attach product to order table pivot
         $order = $this->orderRepository->attachProducts($order, $dto->products);
 
-        // Send email
-        try {
-            Mail::to($order->customer->email)->send(new OrderCreated($order));
-        } catch (\Exception $e) {
-            // Log error but don't stop the process
-            Log::error('Failed to send order confirmation email', [
-                'order_id' => $order->id,
-                'error' => $e->getMessage()
-            ]);
-        }
+        $this->sendEmail($order);
 
         $order->total = $this->calculateTotal($order);
 
@@ -47,11 +37,10 @@ class OrderService
     {
         $order = $this->orderRepository->findById($id);
         $order->total = $this->calculateTotal($order);
-
         return $this->transformOrder->handle($order->toArray());
     }
     
-    public function update(int $id, OrderDTO $dto): bool
+    public function update(int $id, OrderDTO $dto): ?bool
     {
         $order = $this->orderRepository->findById($id);
         
@@ -76,10 +65,27 @@ class OrderService
     /**
      * Calculate total of order
      */
-    private function calculateTotal(Order $order): float
+    protected function calculateTotal(Order $order): float
     {
         return $order->products->sum(function ($product) {
             return $product->pivot->quantity * $product->pivot->price;
         });
+    }
+
+    /**
+     * Send email to customer
+     */
+    protected function sendEmail(Order $order): void
+    {
+        // Send email
+        try {
+            Mail::to($order->customer->email)->send(new OrderCreated($order));
+        } catch (\Exception $e) {
+            // Log error but don't stop the process
+            Log::error('Failed to send order confirmation email', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

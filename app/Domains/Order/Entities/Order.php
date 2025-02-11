@@ -4,6 +4,7 @@ namespace App\Domains\Order\Entities;
 
 use App\Domains\Customer\Entities\Customer;
 use App\Domains\Product\Entities\Product;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     protected $table = 'orders';
     protected $hidden = [
