@@ -1,0 +1,450 @@
+openapi: 3.0.0
+info:
+  title: Pastelaria API
+  version: 1.0.0
+  description: API para gerenciamento de produtos, pedidos e clientes de uma pastelaria.
+servers:
+  - url: 'http://localhost:8085'
+    description: Servidor principal
+paths:
+  /api/login:
+    post:
+      summary: Autenticar usuário
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Autenticação realizada com sucesso
+  /api/product-types:
+    get:
+      summary: Listar todos os tipos de produtos
+      tags:
+        - Tipos de Produtos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de tipos de produtos retornada com sucesso
+    post:
+      summary: Criar um novo tipo de produto
+      tags:
+        - Tipos de Produtos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Tipo de produto criado com sucesso
+  /api/product-types/{id}:
+    get:
+      summary: Obter um tipo de produto por ID
+      tags:
+        - Tipos de Produtos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Tipo de produto retornado com sucesso
+    put:
+      summary: Atualizar um tipo de produto
+      tags:
+        - Tipos de Produtos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Tipo de produto atualizado com sucesso
+    delete:
+      summary: Excluir um tipo de produto
+      tags:
+        - Tipos de Produtos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Tipo de produto excluído com sucesso
+  /api/products:
+    get:
+      summary: Listar todos os produtos
+      tags:
+        - Produtos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de produtos retornada com sucesso
+    post:
+      summary: Criar um novo produto
+      tags:
+        - Produtos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                photo:
+                  type: string
+                  format: binary
+                product_type_id:
+                  type: integer
+      responses:
+        '201':
+          description: Produto criado com sucesso
+  /api/products/{id}:
+    get:
+      summary: Obter um produto por ID
+      tags:
+        - Produtos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Produto retornado com sucesso
+    post:
+      summary: Atualizar um produto
+      tags:
+        - Produtos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: _method
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [PUT]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                photo:
+                  type: string
+                  format: binary
+                product_type_id:
+                  type: integer
+      responses:
+        '200':
+          description: Produto atualizado com sucesso
+    delete:
+      summary: Excluir um produto
+      tags:
+        - Produtos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Produto excluído com sucesso
+  /api/orders:
+    get:
+      summary: Listar todos os pedidos
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de pedidos retornada com sucesso
+    post:
+      summary: Criar um novo pedido
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: integer
+                      quantity:
+                        type: integer
+                      price:
+                        type: number
+      responses:
+        '201':
+          description: Pedido criado com sucesso
+  /api/orders/{id}:
+    get:
+      summary: Obter um pedido por ID
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pedido retornado com sucesso
+    put:
+      summary: Atualizar um pedido
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: integer
+                      quantity:
+                        type: integer
+                      price:
+                        type: number
+      responses:
+        '200':
+          description: Pedido atualizado com sucesso
+    delete:
+      summary: Excluir um pedido
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Pedido excluído com sucesso
+  /api/customers:
+    get:
+      summary: Listar todos os clientes
+      tags:
+        - Clientes
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de clientes retornada com sucesso
+    post:
+      summary: Criar um novo cliente
+      tags:
+        - Clientes
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                birth_date:
+                  type: string
+                  format: date
+                address:
+                  type: string
+                address_complement:
+                  type: string
+                neighborhood:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zip_code:
+                  type: string
+      responses:
+        '201':
+          description: Cliente criado com sucesso
+  /api/customers/{id}:
+    get:
+      summary: Obter um cliente por ID
+      tags:
+        - Clientes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cliente retornado com sucesso
+    put:
+      summary: Atualizar um cliente
+      tags:
+        - Clientes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                birth_date:
+                  type: string
+                  format: date
+                address:
+                  type: string
+                address_complement:
+                  type: string
+                neighborhood:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zip_code:
+                  type: string
+      responses:
+        '200':
+          description: Cliente atualizado com sucesso
+    delete:
+      summary: Excluir um cliente
+      tags:
+        - Clientes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Cliente excluído com sucesso
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
