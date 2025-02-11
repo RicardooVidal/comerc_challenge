@@ -8,7 +8,8 @@ class ProductDTO
         public readonly string $name,
         public readonly float $price,
         public readonly int $product_type_id
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -27,4 +28,4 @@ class ProductDTO
             'product_type_id' => $this->product_type_id
         ];
     }
-} 
+}

@@ -15,7 +15,8 @@ class CustomerDTO
         public readonly string $city,
         public readonly string $state,
         public readonly string $zip_code
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -48,4 +49,4 @@ class CustomerDTO
             'zip_code' => $this->zip_code
         ];
     }
-} 
+}

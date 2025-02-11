@@ -11,9 +11,9 @@ class ProductService
 {
     public function __construct(
         private readonly ProductRepository $productRepository
-    )
-    {}
-    
+    ) {
+    }
+
     public function create(ProductDTO $dto, ?UploadedFile $photo = null)
     {
         $data = $dto->toArray();
@@ -23,17 +23,17 @@ class ProductService
         }
 
         return $this->productRepository->create($data)->toArray();
-    }   
-    
+    }
+
     public function findById(int $id)
     {
         return $this->productRepository->findById($id)?->toArray();
     }
-    
+
     public function update(int $id, ProductDTO $dto, ?UploadedFile $photo = null): ?bool
     {
         $data = $dto->toArray();
-    
+
         if ($photo) {
             $this->deletePhoto($id);
 
@@ -42,7 +42,7 @@ class ProductService
 
         return $this->productRepository->update($id, $data);
     }
-    
+
     public function delete(int $id): void
     {
         $this->deletePhoto($id);

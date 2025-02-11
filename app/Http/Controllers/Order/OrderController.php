@@ -14,13 +14,13 @@ class OrderController extends Controller
 {
     public function __construct(
         private readonly OrderService $orderService
-    )
-    {}
+    ) {
+    }
 
     public function index(AllOrderRequest $request): JsonResponse
     {
         $orders = $this->orderService->findAll($request->all());
-        
+
         return response()->json($orders);
     }
 

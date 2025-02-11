@@ -14,8 +14,8 @@ class ProductTypeController extends Controller
 {
     public function __construct(
         private readonly ProductTypeService $productTypeService
-    )
-    {}
+    ) {
+    }
 
     public function index(AllProductTypeRequest $request): JsonResponse
     {

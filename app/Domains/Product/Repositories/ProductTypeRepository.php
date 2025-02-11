@@ -10,8 +10,8 @@ class ProductTypeRepository implements BaseRepositoryInterface
 {
     public function __construct(
         private readonly ProductType $productType
-    )
-    {}
+    ) {
+    }
 
     public function findById(int $id): ?ProductType
     {
@@ -27,12 +27,12 @@ class ProductTypeRepository implements BaseRepositoryInterface
     {
         return $this->productType->create($data);
     }
-    
+
     public function update(int $id, array $data): bool
     {
         return $this->productType->findOrFail($id)->update($data);
     }
-    
+
     public function delete(int $id): void
     {
         $this->productType->findOrFail($id)->delete();

@@ -10,8 +10,8 @@ class OrderRepository implements BaseRepositoryInterface
 {
     public function __construct(
         private readonly Order $order
-    )
-    {}
+    ) {
+    }
 
     public function findById(int $id): ?Order
     {
@@ -31,7 +31,7 @@ class OrderRepository implements BaseRepositoryInterface
     {
         return $this->order->create($data);
     }
-    
+
     public function update(int $id, array $data): bool
     {
         $order = $this->order->findOrFail($id);
@@ -39,7 +39,7 @@ class OrderRepository implements BaseRepositoryInterface
 
         return $order->update($data);
     }
-    
+
     public function delete(int $id): void
     {
         $order = $this->findById($id);
@@ -51,7 +51,7 @@ class OrderRepository implements BaseRepositoryInterface
     {
         // Soft delete existing relationships
         $order->products()->newPivotStatement()->where('order_id', $order->id)->update(['deleted_at' => now()]);
-        
+
         foreach ($products as $product) {
             $order->products()->attach($product['product_id'], [
                 'quantity' => $product['quantity'],

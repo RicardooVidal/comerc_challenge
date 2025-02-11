@@ -8,7 +8,6 @@
 5. [Autenticação](#autenticação)
 6. [Testes](#testes)
 7. [Endpoints](#endpoints)
-8. [Documentação completa](#documentação-completa)
 
 ---
 

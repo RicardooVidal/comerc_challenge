@@ -10,8 +10,8 @@ class CustomerRepository implements BaseRepositoryInterface
 {
     public function __construct(
         private readonly Customer $customer
-    )
-    {}
+    ) {
+    }
 
     public function findById(int $id): Customer
     {
@@ -21,7 +21,7 @@ class CustomerRepository implements BaseRepositoryInterface
     public function findAll(array $filters): Collection
     {
         return $this->customer
-        ->when(!empty($filters), function($query) use ($filters) {
+        ->when(!empty($filters), function ($query) use ($filters) {
             foreach ($filters as $key => $value) {
                 if (!empty($value)) {
                     $query->when($key === 'name', function ($q) use ($key, $value) {
@@ -39,12 +39,12 @@ class CustomerRepository implements BaseRepositoryInterface
     {
         return $this->customer->create($data);
     }
-    
+
     public function update(int $id, array $data): bool
     {
         return $this->customer->findOrFail($id)->update($data);
     }
-    
+
     public function delete(int $id): void
     {
         $this->customer->findOrFail($id)->delete();

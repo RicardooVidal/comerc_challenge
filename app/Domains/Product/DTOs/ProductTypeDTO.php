@@ -7,7 +7,8 @@ class ProductTypeDTO
     public function __construct(
         public readonly string $name,
         public readonly string $description
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,4 +25,4 @@ class ProductTypeDTO
             'description' => $this->description
         ];
     }
-} 
+}

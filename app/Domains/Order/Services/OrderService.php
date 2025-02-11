@@ -15,8 +15,8 @@ class OrderService
     public function __construct(
         private readonly OrderRepository $orderRepository,
         private readonly TransformOrder $transformOrder
-    )
-    {}
+    ) {
+    }
 
     public function findById(int $id): array
     {
@@ -34,7 +34,7 @@ class OrderService
             return $this->transformOrder->handle($order->toArray());
         })->toArray();
     }
-    
+
     public function create(OrderDTO $dto): array
     {
         $order = $this->orderRepository->create([
@@ -49,14 +49,14 @@ class OrderService
 
         return $order->toArray();
     }
-    
+
     public function update(int $id, OrderDTO $dto): ?bool
     {
         $order = $this->orderRepository->findById($id);
-        
+
         return $this->orderRepository->update($id, $dto->toArray());
     }
-    
+
     public function delete(int $id): void
     {
         $this->orderRepository->delete($id);

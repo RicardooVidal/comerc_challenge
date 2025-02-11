@@ -7,7 +7,8 @@ class OrderDTO
     public function __construct(
         public readonly int $customer_id,
         public readonly array $products
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,4 +25,4 @@ class OrderDTO
             'products' => $this->products
         ];
     }
-} 
+}
