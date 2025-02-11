@@ -61,7 +61,7 @@ O projeto foi desenvolvido utilizando os princípios DDD (Domain-Driven Design) 
    Usuário para teste (somente após rodar o comando db:seed):
    ```bash
     E-mail: "test@test.com"
-    Senha: "1234556"
+    Senha: "123456"
 
 ### Testes
 
