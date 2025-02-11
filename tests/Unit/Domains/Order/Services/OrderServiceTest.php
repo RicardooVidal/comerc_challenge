@@ -2,12 +2,15 @@
 
 namespace Tests\Unit\Domains\Order\Services;
 
+use App\Domains\Customer\Entities\Customer;
 use App\Domains\Customer\Transforms\TransformOrder;
 use App\Domains\Order\DTOs\OrderDTO;
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\Order\Services\OrderService;
 use App\Domains\Product\Entities\Product;
+use App\Mail\OrderCreated;
+use Illuminate\Support\Facades\Mail;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery;
 
@@ -32,6 +35,114 @@ class OrderServiceTest extends MockeryTestCase
         $this->service = Mockery::mock(TestableOrderService::class, [$this->repository, new TransformOrder()])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
+    }
+
+    public function test_find_order_by_id(): void
+    {
+        // Arrange
+        $order = Order::factory()->make()->toArray();
+        $order['id'] = 1;
+
+        $expectedOrder = [
+            'id' => $order['id'],
+            'customer_id' => 1,
+            'total' => 100.0,
+            'created_at' => null,
+            'products' => collect([]),
+            'customer_name' => null,
+        ];
+
+        $transformOrder = Mockery::mock(TransformOrder::class);
+        $this->service = Mockery::mock(TestableOrderService::class, [$this->repository, $transformOrder])
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        
+        $orderModel = Mockery::mock(Order::class);
+        $orderModel->shouldReceive('toArray')
+            ->once()
+            ->andReturn($order);
+    
+        $this->repository->shouldReceive('findById')
+            ->once()
+            ->with($order['id'])
+            ->andReturn($orderModel);
+
+
+        $this->service->shouldReceive('calculateTotal')
+            ->once()
+            ->with($orderModel)
+            ->andReturn(100.0);
+
+        $orderModel->shouldReceive('setAttribute')
+            ->once()
+            ->with('total', Mockery::type('float'));
+
+        $transformOrder->shouldReceive('handle')
+            ->once()
+            ->with($order)
+            ->andReturn($expectedOrder);
+
+        // Act
+        $result = $this->service->findById($order['id']);
+
+        // Assert        
+        $this->assertEquals($expectedOrder, $result);
+    }
+
+    public function test_find_all_orders(): void
+    {
+        // Arrange
+        $orders = Order::factory()
+            ->count(2)
+            ->make();
+
+        $expectedOrders = [
+            [
+                'id' => 1,
+                'customer_id' => 1,
+                'total' => 100.0,
+                'created_at' => null,
+                'products' => null,
+                'customer_name' => null,
+            ],
+            [
+                'id' => 2,
+                'customer_id' => 1,
+                'total' => 100.0,
+                'created_at' => null,
+                'products' => null,
+                'customer_name' => null,
+            ],
+        ];
+
+        $transformOrder = Mockery::mock(TransformOrder::class);
+        $this->service = Mockery::mock(TestableOrderService::class, [$this->repository, $transformOrder])
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $this->repository->shouldReceive('findAll')
+            ->once()
+            ->with([])
+            ->andReturn($orders);
+
+        $this->service->shouldReceive('calculateTotal')
+            ->once()
+            ->with($orders[0])
+            ->andReturn(100.0);
+
+        $this->service->shouldReceive('calculateTotal')
+            ->once()
+            ->with($orders[1])
+            ->andReturn(100.0);
+
+        $transformOrder->shouldReceive('handle')
+            ->twice()
+            ->with(Mockery::on(function ($arg) use ($orders) {
+                return $arg == $orders[0]->toArray() || $arg == $orders[1]->toArray();
+            }))
+            ->andReturnValues([$expectedOrders[0], $expectedOrders[1]]);
+
+        $this->assertEquals($expectedOrders, $this->service->findAll([]));
     }
 
     public function test_create_order(): void

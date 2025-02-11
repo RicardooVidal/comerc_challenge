@@ -26,7 +26,7 @@ class ProductServiceTest extends TestCase
         $this->service = new ProductService($this->repository);
     }
 
-    public function test_find_by_id(): void
+    public function test_find_product_by_id(): void
     {
         // Arrange
         $id = 1;
@@ -50,7 +50,7 @@ class ProductServiceTest extends TestCase
         $this->assertEquals($product, $result);
     }
 
-    public function test_find_by_id_not_found(): void
+    public function test_find_product_by_id_not_found(): void
     {
         // Arrange
         $id = 1;
@@ -66,7 +66,7 @@ class ProductServiceTest extends TestCase
         $this->service->findById($id);
     }
 
-    public function test_find_all(): void
+    public function test_find_all_products(): void
     {
         // Arrange
         $products = [
