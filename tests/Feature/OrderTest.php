@@ -159,7 +159,7 @@ class OrderTest extends TestCase
         ]);
     }
 
-    public function test_cannot_delete_nonexistent_order(): void
+    public function test_cannot_delete_order_not_found(): void
     {
         $response = $this->deleteJson('/api/orders/9999');
         $response->assertNotFound();

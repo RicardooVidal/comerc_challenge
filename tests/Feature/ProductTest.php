@@ -169,7 +169,7 @@ class ProductTest extends TestCase
         ]);
     }
 
-    public function test_cannot_delete_nonexistent_product(): void
+    public function test_cannot_delete_product_not_found(): void
     {
         $response = $this->deleteJson('/api/products/9999');
         $response->assertNotFound();

@@ -286,7 +286,7 @@ class ProductServiceTest extends TestCase
         Storage::disk('public')->assertMissing($photo);
     }
 
-    public function test_delete_nonexistent_product(): void
+    public function test_delete_product_not_found(): void
     {
         $id = 1;
 

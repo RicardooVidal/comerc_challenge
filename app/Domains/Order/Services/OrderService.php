@@ -52,8 +52,6 @@ class OrderService
 
     public function update(int $id, OrderDTO $dto): ?bool
     {
-        $order = $this->orderRepository->findById($id);
-
         return $this->orderRepository->update($id, $dto->toArray());
     }
 

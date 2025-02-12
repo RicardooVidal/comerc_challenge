@@ -129,7 +129,7 @@ class CustomerTest extends TestCase
         ]);
     }
 
-    public function test_cannot_delete_nonexistent_customer(): void
+    public function test_cannot_delete_customer_not_found(): void
     {
         $response = $this->deleteJson('/api/customers/9999');
         $response->assertNotFound();
